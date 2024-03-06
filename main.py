@@ -38,9 +38,9 @@ def handle_pitch_shift():
         return jsonify({"error": "n_steps parameter is missing"}), 400
     
     try:
-        n_steps = int(request.form['n_steps'])
+        n_steps = float(request.form['n_steps'])
     except ValueError:
-        return jsonify({"error": "n_steps must be an integer"}), 400
+        return jsonify({"error": "n_steps must be an float"}), 400
 
     # Secure the filename before saving it
     # filename = secure_filename(file.filename)
@@ -60,7 +60,7 @@ def handle_pitch_shift():
     # Return the processed file or a success message
     return send_from_directory(app.config['PROCESSED_FOLDER'], output_filename, as_attachment=True)
 
-@app.route('/timestretch', methods=['POST'])
+@app.route('/time_stretch', methods=['POST'])
 def handle_time_stretch():
     if 'file' not in request.files or 'rate' not in request.form:
         return 'Missing file or rate parameter', 400
@@ -72,10 +72,10 @@ def handle_time_stretch():
     filepath = os.path.join(app.config['UPLOAD_FOLDER'], file.filename)
     file.save(filepath)
 
-    output_path = os.path.join(app.config['PROCESSED_FOLDER'], 'time_stretched' + file.filename)
+    output_path = os.path.join(app.config['PROCESSED_FOLDER'], 'time_stretched_' + file.filename)
     time_stretch(filepath, float(rate), output_path)
 
-    return send_from_directory(app.config['PROCESSED_FOLDER'], 'time_stretched' + file.filename, as_attachment=True)
+    return send_from_directory(app.config['PROCESSED_FOLDER'], 'time_stretched_' + file.filename, as_attachment=True)
 
 @app.route('/noisecancel', methods=['POST'])
 def handle_noise_cancel():
