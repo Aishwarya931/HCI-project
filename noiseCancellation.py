@@ -1,6 +1,11 @@
 import librosa
 import soundfile as sf
-def noise_cancel(audio_path, output_path):
-    y, sr = librosa.load(audio_path)
-    y_reduced = nr.reduce_noise(y=y, sr=sr)
-    sf.write(output_path, y_reduced, sr)
+import noisereduce as nr
+
+def reduce_noise(input_path, output_path):
+    # Load audio
+    y, sr = librosa.load(input_path, sr=None)
+    # Apply noise reduction
+    reduced_noise = nr.reduce_noise(y=y, sr=sr)
+    # Save output
+    sf.write(output_path, reduced_noise, sr)
